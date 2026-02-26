@@ -31,10 +31,12 @@ jobs:
           python-version: "3.13"
 
       - name: Check Dependency Manifest Hash
-        run: pwsh -NoProfile -NonInteractive -File ./scripts/check_dependency_manifest_hash.ps1
+        shell: pwsh
+        run: ./scripts/check_dependency_manifest_hash.ps1
 
       - name: Check Proto Checksums
-        run: pwsh -NoProfile -NonInteractive -File ./scripts/check_proto_checksums.ps1
+        shell: pwsh
+        run: ./scripts/check_proto_checksums.ps1
 
       - name: Run Rust Tests
         run: cargo test --workspace --locked

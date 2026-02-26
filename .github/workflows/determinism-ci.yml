@@ -32,10 +32,12 @@ jobs:
           components: rustfmt, clippy
 
       - name: Check Dependency Manifest Hash
-        run: pwsh -NoProfile -NonInteractive -File ./scripts/check_dependency_manifest_hash.ps1
+        shell: pwsh
+        run: ./scripts/check_dependency_manifest_hash.ps1
 
       - name: Check Proto Checksums
-        run: pwsh -NoProfile -NonInteractive -File ./scripts/check_proto_checksums.ps1
+        shell: pwsh
+        run: ./scripts/check_proto_checksums.ps1
 
       - name: Build + Test Workspace
         run: cargo test --workspace --locked
@@ -44,7 +46,8 @@ jobs:
         run: cargo run --locked -p rmvm-tests --bin conformance_runner -- check
 
       - name: Export Conformance Summary
-        run: pwsh -NoProfile -NonInteractive -File ./scripts/export_conformance_summary.ps1 -RunId "${{ env.RMVM_RUN_ID }}" -OsId "${{ env.RMVM_OS_ID }}"
+        shell: pwsh
+        run: ./scripts/export_conformance_summary.ps1 -RunId "${{ env.RMVM_RUN_ID }}" -OsId "${{ env.RMVM_OS_ID }}"
 
       - name: Upload Conformance Reports
         if: always()
@@ -111,7 +114,8 @@ jobs:
           python-version: "3.13"
 
       - name: Check Proto Checksums
-        run: pwsh -NoProfile -NonInteractive -File ./scripts/check_proto_checksums.ps1
+        shell: pwsh
+        run: ./scripts/check_proto_checksums.ps1
 
       - name: Build Rust Workspace
         run: cargo build --workspace --locked
