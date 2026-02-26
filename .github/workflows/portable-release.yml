@@ -24,7 +24,7 @@ jobs:
         run: cargo test --manifest-path portable-brain-proxy/Cargo.toml --locked
 
   build-cortex-binaries:
-    name: Build cortex-app (${{ matrix.os }}-${{ runner.arch }})
+    name: Build cortex-app (${{ matrix.os }}-${{ matrix.arch }})
     needs: [validate]
     runs-on: ${{ matrix.runner }}
     strategy:
@@ -33,10 +33,13 @@ jobs:
         include:
           - runner: ubuntu-latest
             os: linux
+            arch: x64
           - runner: macos-latest
             os: macos
+            arch: x64
           - runner: windows-latest
             os: windows
+            arch: x64
     steps:
       - uses: actions/checkout@v4
 
@@ -67,7 +70,7 @@ jobs:
       - name: Upload binary artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: cortex-app-${{ matrix.os }}-${{ runner.arch }}
+          name: cortex-app-${{ matrix.os }}-${{ matrix.arch }}
           path: release/*
           if-no-files-found: error
 

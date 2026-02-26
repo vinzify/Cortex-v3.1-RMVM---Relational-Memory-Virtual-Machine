@@ -59,7 +59,7 @@ jobs:
           python -m twine check dist/*
 
   build-server-binaries:
-    name: Build rmvm-grpc-server (${{ matrix.os }}-${{ runner.arch }})
+    name: Build rmvm-grpc-server (${{ matrix.os }}-${{ matrix.arch }})
     needs: [validate]
     runs-on: ${{ matrix.runner }}
     strategy:
@@ -68,10 +68,13 @@ jobs:
         include:
           - runner: ubuntu-latest
             os: linux
+            arch: x64
           - runner: macos-latest
             os: macos
+            arch: x64
           - runner: windows-latest
             os: windows
+            arch: x64
     steps:
       - uses: actions/checkout@v4
 
@@ -102,7 +105,7 @@ jobs:
       - name: Upload Binary Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: rmvm-grpc-server-${{ matrix.os }}-${{ runner.arch }}
+          name: rmvm-grpc-server-${{ matrix.os }}-${{ matrix.arch }}
           path: release/*
           if-no-files-found: error
 
