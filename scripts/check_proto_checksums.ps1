@@ -4,9 +4,28 @@ $repoRoot = Join-Path $PSScriptRoot ".."
 $coreProto = Join-Path $repoRoot "proto\cortex_rmvm_v3_1.proto"
 $svcProto = Join-Path $repoRoot "proto\cortex_rmvm_v3_1_service.proto"
 
+function Get-CanonicalTextSha256([string]$Path) {
+  if (!(Test-Path $Path)) {
+    throw "Missing proto file: $Path"
+  }
+
+  $raw = Get-Content $Path -Raw
+  # Canonicalize line endings so checks are stable across checkout modes/OSes.
+  $normalized = $raw.Replace("`r`n", "`n").Replace("`r", "`n")
+  $bytes = ([System.Text.UTF8Encoding]::new($false)).GetBytes($normalized)
+  $sha = [System.Security.Cryptography.SHA256]::Create()
+  try {
+    $hashBytes = $sha.ComputeHash($bytes)
+  }
+  finally {
+    $sha.Dispose()
+  }
+  return ([System.BitConverter]::ToString($hashBytes)).Replace("-", "").ToLowerInvariant()
+}
+
 $actual = @{
-  "proto/cortex_rmvm_v3_1.proto" = (Get-FileHash $coreProto -Algorithm SHA256).Hash.ToLowerInvariant()
-  "proto/cortex_rmvm_v3_1_service.proto" = (Get-FileHash $svcProto -Algorithm SHA256).Hash.ToLowerInvariant()
+  "proto/cortex_rmvm_v3_1.proto" = Get-CanonicalTextSha256 $coreProto
+  "proto/cortex_rmvm_v3_1_service.proto" = Get-CanonicalTextSha256 $svcProto
 }
 
 $manifests = @(
