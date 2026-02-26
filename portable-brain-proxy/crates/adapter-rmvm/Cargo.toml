@@ -1,0 +1,11 @@
+[package]
+name = "adapter-rmvm"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+
+[dependencies]
+anyhow.workspace = true
+rmvm-grpc.workspace = true
+rmvm-proto.workspace = true
+tonic = "0.14.2"

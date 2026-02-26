@@ -1,0 +1,90 @@
+name: Portable Release
+
+on:
+  push:
+    tags:
+      - "portable-v*"
+
+permissions:
+  contents: write
+
+jobs:
+  validate:
+    name: Validate Portable Workspace
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Rust Toolchain
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          toolchain: 1.93.1
+
+      - name: Run portable-brain-proxy tests
+        run: cargo test --manifest-path portable-brain-proxy/Cargo.toml --locked
+
+  build-cortex-binaries:
+    name: Build cortex-app (${{ matrix.os }}-${{ runner.arch }})
+    needs: [validate]
+    runs-on: ${{ matrix.runner }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - runner: ubuntu-latest
+            os: linux
+          - runner: macos-latest
+            os: macos
+          - runner: windows-latest
+            os: windows
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Rust Toolchain
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          toolchain: 1.93.1
+
+      - name: Build cortex-app release binary
+        run: cargo build --manifest-path portable-brain-proxy/Cargo.toml --locked -p cortex-app --bin cortex --release
+
+      - name: Package binary + SHA256
+        shell: pwsh
+        run: |
+          New-Item -ItemType Directory -Force -Path release | Out-Null
+          $binPath = if ("${{ matrix.os }}" -eq "windows") {
+            "portable-brain-proxy/target/release/cortex.exe"
+          } else {
+            "portable-brain-proxy/target/release/cortex"
+          }
+          $arch = "$env:RUNNER_ARCH".ToLowerInvariant()
+          $ext = if ("${{ matrix.os }}" -eq "windows") { ".exe" } else { "" }
+          $asset = "cortex-app-${{ matrix.os }}-$arch$ext"
+          Copy-Item $binPath "release/$asset"
+          $hash = (Get-FileHash "release/$asset" -Algorithm SHA256).Hash.ToLowerInvariant()
+          Set-Content -Path "release/$asset.sha256" -Value "$hash  $asset" -Encoding utf8NoBOM
+
+      - name: Upload binary artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: cortex-app-${{ matrix.os }}-${{ runner.arch }}
+          path: release/*
+          if-no-files-found: error
+
+  github-release:
+    name: Publish Portable Pre-release
+    needs: [build-cortex-binaries]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          path: release-assets
+          merge-multiple: true
+
+      - name: Create GitHub pre-release
+        uses: softprops/action-gh-release@v2
+        with:
+          prerelease: true
+          body: |
+            OpenAI-compatible proxy mode + portable brain (encrypted)
+          files: release-assets/*
