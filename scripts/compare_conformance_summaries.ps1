@@ -1,10 +1,10 @@
-$ErrorActionPreference = "Stop"
-
 param(
   [Parameter(Mandatory = $true)][string]$LinuxSummary,
   [Parameter(Mandatory = $true)][string]$MacSummary,
   [Parameter(Mandatory = $true)][string]$WindowsSummary
 )
+
+$ErrorActionPreference = "Stop"
 
 function Load-ById([string]$Path) {
   $json = Get-Content $Path -Raw | ConvertFrom-Json

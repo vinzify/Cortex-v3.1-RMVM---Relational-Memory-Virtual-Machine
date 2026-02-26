@@ -1,9 +1,9 @@
-$ErrorActionPreference = "Stop"
-
 param(
   [Parameter(Mandatory = $true)][string]$RunId,
   [Parameter(Mandatory = $true)][string]$OsId
 )
+
+$ErrorActionPreference = "Stop"
 
 $repoRoot = Join-Path $PSScriptRoot ".."
 $reportDir = Join-Path $repoRoot "tests\conformance\v1\reports\$RunId\$OsId"

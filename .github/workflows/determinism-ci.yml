@@ -32,12 +32,10 @@ jobs:
           components: rustfmt, clippy
 
       - name: Check Dependency Manifest Hash
-        shell: pwsh
-        run: ./scripts/check_dependency_manifest_hash.ps1
+        run: pwsh -NoProfile -NonInteractive -File ./scripts/check_dependency_manifest_hash.ps1
 
       - name: Check Proto Checksums
-        shell: pwsh
-        run: ./scripts/check_proto_checksums.ps1
+        run: pwsh -NoProfile -NonInteractive -File ./scripts/check_proto_checksums.ps1
 
       - name: Build + Test Workspace
         run: cargo test --workspace --locked
@@ -46,16 +44,15 @@ jobs:
         run: cargo run --locked -p rmvm-tests --bin conformance_runner -- check
 
       - name: Export Conformance Summary
-        shell: pwsh
-        run: ./scripts/export_conformance_summary.ps1 -RunId $env:RMVM_RUN_ID -OsId $env:RMVM_OS_ID
+        run: pwsh -NoProfile -NonInteractive -File ./scripts/export_conformance_summary.ps1 -RunId "${{ env.RMVM_RUN_ID }}" -OsId "${{ env.RMVM_OS_ID }}"
 
       - name: Upload Conformance Reports
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: conformance-${{ matrix.os_id }}
-          path: tests/conformance/v1/reports/${{ env.RMVM_RUN_ID }}/${{ env.RMVM_OS_ID }}
-          if-no-files-found: error
+          name: conformance-reports-${{ matrix.os }}
+          path: tests/conformance/v1/reports/**
+          if-no-files-found: ignore
 
   compare-determinism:
     name: Compare Cross-OS Determinism
@@ -67,28 +64,30 @@ jobs:
       - name: Download Linux Artifact
         uses: actions/download-artifact@v4
         with:
-          name: conformance-linux
+          name: conformance-reports-ubuntu-latest
           path: artifacts/linux
 
       - name: Download macOS Artifact
         uses: actions/download-artifact@v4
         with:
-          name: conformance-macos
+          name: conformance-reports-macos-latest
           path: artifacts/macos
 
       - name: Download Windows Artifact
         uses: actions/download-artifact@v4
         with:
-          name: conformance-windows
+          name: conformance-reports-windows-latest
           path: artifacts/windows
 
       - name: Compare Summaries
-        shell: pwsh
         run: |
-          ./scripts/compare_conformance_summaries.ps1 `
-            -LinuxSummary artifacts/linux/summary.json `
-            -MacSummary artifacts/macos/summary.json `
-            -WindowsSummary artifacts/windows/summary.json
+          LINUX_SUMMARY="$(find artifacts/linux -type f -name summary.json | head -n 1)"
+          MAC_SUMMARY="$(find artifacts/macos -type f -name summary.json | head -n 1)"
+          WINDOWS_SUMMARY="$(find artifacts/windows -type f -name summary.json | head -n 1)"
+          test -n "$LINUX_SUMMARY"
+          test -n "$MAC_SUMMARY"
+          test -n "$WINDOWS_SUMMARY"
+          pwsh -NoProfile -NonInteractive -File ./scripts/compare_conformance_summaries.ps1 -LinuxSummary "$LINUX_SUMMARY" -MacSummary "$MAC_SUMMARY" -WindowsSummary "$WINDOWS_SUMMARY"
 
   sdk-wire-compat:
     name: SDK Wire Compatibility
@@ -112,8 +111,7 @@ jobs:
           python-version: "3.13"
 
       - name: Check Proto Checksums
-        shell: pwsh
-        run: ./scripts/check_proto_checksums.ps1
+        run: pwsh -NoProfile -NonInteractive -File ./scripts/check_proto_checksums.ps1
 
       - name: Build Rust Workspace
         run: cargo build --workspace --locked
