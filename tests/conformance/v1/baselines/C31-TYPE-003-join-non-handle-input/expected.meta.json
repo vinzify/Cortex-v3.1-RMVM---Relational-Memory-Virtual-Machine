@@ -1,0 +1,7 @@
+{
+  "error_code": "TYPE_MISMATCH",
+  "response_sha256": "f8746c05d14af4b98d0ebaabf24ef70011761e17b3c9be4641716f0a210455d2",
+  "semantic_root": null,
+  "status": "REJECTED",
+  "vector_id": "C31-TYPE-003-join-non-handle-input"
+}

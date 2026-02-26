@@ -1,0 +1,7 @@
+{
+  "error_code": null,
+  "response_sha256": "f9d78262bd810b017d3647e74f3e3260fdf02e38308bac1637a89a6637c171ca",
+  "semantic_root": "a683cfaa0749b5a57aa00b73bbd142a7a780c28e3e6a719ad3c627b827c3a150",
+  "status": "OK",
+  "vector_id": "C31-CORE-002-selector-resolve-deterministic"
+}

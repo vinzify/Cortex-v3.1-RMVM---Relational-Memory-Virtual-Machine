@@ -1,0 +1,15 @@
+[package]
+name = "rmvm-tests"
+version.workspace = true
+edition.workspace = true
+
+[dependencies]
+hex.workspace = true
+prost.workspace = true
+prost-types.workspace = true
+serde = { version = "1.0.228", features = ["derive"] }
+serde_json = "1.0.145"
+sha2.workspace = true
+rmvm-kernel = { path = "../rmvm-kernel" }
+rmvm-proto = { path = "../rmvm-proto" }
+walkdir = "2.5.0"

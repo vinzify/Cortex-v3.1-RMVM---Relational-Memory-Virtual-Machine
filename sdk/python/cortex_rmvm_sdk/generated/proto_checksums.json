@@ -1,0 +1,7 @@
+{
+  "proto_version": "cortex_rmvm_v3_1",
+  "checksums": {
+    "proto/cortex_rmvm_v3_1.proto": "cefe6505254a9b6d18a30c76b0e516b09d8c42c7046e0b11db887ba2ed0c69c4",
+    "proto/cortex_rmvm_v3_1_service.proto": "330089470c9c59bd5d29603df236960f73b1d6382127262f69685407039b38c7"
+  }
+}

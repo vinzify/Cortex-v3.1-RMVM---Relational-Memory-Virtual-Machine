@@ -1,0 +1,14 @@
+target/
+
+sdk/typescript/node_modules/
+sdk/typescript/dist/
+
+sdk/python/build/
+sdk/python/dist/
+sdk/python/*.egg-info/
+sdk/python/**/__pycache__/
+sdk/python/**/*.pyc
+
+tests/conformance/v1/reports/local/
+
+.DS_Store

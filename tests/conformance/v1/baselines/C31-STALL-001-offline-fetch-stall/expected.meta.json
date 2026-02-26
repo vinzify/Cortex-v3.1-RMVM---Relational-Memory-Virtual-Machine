@@ -1,0 +1,7 @@
+{
+  "error_code": null,
+  "response_sha256": "1df399e415a0310c79c279a6461a1bbc403f17ed9b9fcb23419db1f849ef29b8",
+  "semantic_root": null,
+  "status": "STALL",
+  "vector_id": "C31-STALL-001-offline-fetch-stall"
+}

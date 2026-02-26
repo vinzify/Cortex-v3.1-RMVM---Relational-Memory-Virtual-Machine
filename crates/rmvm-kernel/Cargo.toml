@@ -1,0 +1,24 @@
+[package]
+name = "rmvm-kernel"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+repository.workspace = true
+homepage.workspace = true
+readme = "README.md"
+description = "Deterministic Cortex RMVM v3.1 kernel execution engine."
+keywords = ["rmvm", "deterministic", "kernel", "memory", "cortex"]
+categories = ["algorithms", "api-bindings"]
+include = [
+  "Cargo.toml",
+  "README.md",
+  "src/**"
+]
+
+[dependencies]
+hex.workspace = true
+prost-types.workspace = true
+regex.workspace = true
+rmvm-proto = { version = "0.1.0", path = "../rmvm-proto" }
+sha2.workspace = true
+thiserror.workspace = true

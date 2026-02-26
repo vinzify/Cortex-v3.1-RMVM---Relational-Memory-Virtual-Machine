@@ -1,0 +1,7 @@
+{
+  "error_code": "FIELD_REDACTED",
+  "response_sha256": "9bc1cb5194113e3dc0d0740d9ccb6d9765cd154adeaa67f206963f7a2cd6226d",
+  "semantic_root": null,
+  "status": "REJECTED",
+  "vector_id": "C31-TYPE-002-project-unknown-field"
+}

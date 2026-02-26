@@ -1,0 +1,47 @@
+syntax = "proto3";
+
+package cortex.rmvm.v3_1;
+
+import "cortex_rmvm_v3_1.proto";
+
+message AppendEventRequest {
+  string request_id = 1;
+  string subject = 2;
+  string text = 3;
+  Scope scope = 4;
+}
+
+message AppendEventResponse {
+  string event_id = 1;
+  repeated string handle_refs = 2;
+}
+
+message GetManifestRequest {
+  string request_id = 1;
+}
+
+message GetManifestResponse {
+  PublicManifest manifest = 1;
+}
+
+message ForgetRequest {
+  string request_id = 1;
+  string subject = 2;
+  string predicate_label = 3;
+  Scope scope = 4;
+  string reason = 5;
+}
+
+message ForgetResponse {
+  ExecutionStatus status = 1;
+  repeated VerifiedAssertion assertions = 2;
+  RenderedOutput rendered = 3;
+  ExecutionError error = 4;
+}
+
+service RmvmExecutor {
+  rpc AppendEvent(AppendEventRequest) returns (AppendEventResponse);
+  rpc GetManifest(GetManifestRequest) returns (GetManifestResponse);
+  rpc Execute(ExecuteRequest) returns (ExecuteResponse);
+  rpc Forget(ForgetRequest) returns (ForgetResponse);
+}

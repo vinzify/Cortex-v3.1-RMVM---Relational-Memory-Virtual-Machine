@@ -1,0 +1,7 @@
+{
+  "error_code": "DATA_LEAK_PREVENTION",
+  "response_sha256": "2b6b20ede3a9e8b91c89b697aec18e1620136d74ae1de9ee5a6f4beda418e47a",
+  "semantic_root": null,
+  "status": "REJECTED",
+  "vector_id": "C31-SEC-007-taint-gate-mixed-policy-sink"
+}

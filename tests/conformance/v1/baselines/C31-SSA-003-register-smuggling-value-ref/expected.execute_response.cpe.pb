@@ -1,0 +1,1 @@
+22.ASSERT bindings must trace to FETCH or PROJECT

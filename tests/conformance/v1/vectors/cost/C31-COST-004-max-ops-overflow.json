@@ -1,0 +1,96 @@
+{
+  "vector_id": "C31-COST-004-max-ops-overflow",
+  "spec_version": "conformance/v1.0.0",
+  "proto_version": "cortex_rmvm_v3_1",
+  "description": "Plan with too many ops should reject.",
+  "manifest": {
+    "request_id": "req-C31-COST-004-max-ops-overflow",
+    "handles": [
+      {
+        "ref": "H0",
+        "type_id": "normative.preference",
+        "availability": "READY",
+        "subject": "user:vinz",
+        "predicate_label": "prefers_beverage",
+        "trust_tier": "TIER_3_CONFIRMED",
+        "taint": [],
+        "scope": "SCOPE_GLOBAL",
+        "signature_summary": "prefers_beverage for user:vinz",
+        "conflict_group_id": "conflict:prefers_beverage:user:vinz:global",
+        "open_end": true
+      }
+    ],
+    "selectors": [
+      {
+        "sel": "S0",
+        "description": "Find preferences for subject",
+        "params": [
+          {
+            "name": "subject",
+            "type": "PARAM_STRING",
+            "enum_values": []
+          }
+        ],
+        "cost_weight": 1.25,
+        "return_type": "RETURN_HANDLE_SET"
+      }
+    ],
+    "context": [],
+    "budget": {
+      "max_ops": 2,
+      "max_join_depth": 3,
+      "max_fanout": 64,
+      "max_total_cost": 256.0
+    }
+  },
+  "plan": {
+    "request_id": "req-C31-COST-004-max-ops-overflow",
+    "steps": [
+      {
+        "out": "r0",
+        "op": {
+          "kind": "fetch",
+          "handle_ref": "H0"
+        }
+      },
+      {
+        "out": "r1",
+        "op": {
+          "kind": "project",
+          "in_reg": "r0",
+          "field_paths": [
+            "meta.subject"
+          ]
+        }
+      },
+      {
+        "out": "r2",
+        "op": {
+          "kind": "project",
+          "in_reg": "r1",
+          "field_paths": [
+            "meta.subject"
+          ]
+        }
+      }
+    ],
+    "outputs": []
+  },
+  "execute_options": {
+    "allow_partial_on_stall": false,
+    "degraded_mode": false,
+    "broken_lineage_handles": [],
+    "narrative_templates": []
+  },
+  "expect": {
+    "status": "REJECTED",
+    "error_code": "GRAPH_TRAVERSAL_LIMIT",
+    "semantic_root": null,
+    "verified_blocks": null,
+    "stall": null
+  },
+  "determinism": {
+    "assert_response_cpe_sha256": "c6dd6bcc6dceb0197c643b8346fe959d2de6e65be806167e4a79f4c1cd2b3f00",
+    "assert_semantic_root": true
+  }
+}

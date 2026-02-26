@@ -1,0 +1,7 @@
+{
+  "error_code": "SCHEMA_VIOLATION",
+  "response_sha256": "6d65b3b82b0f08bda722c143f823a2683810e4eaba23d0c4bebcc38f60f78e7b",
+  "semantic_root": null,
+  "status": "REJECTED",
+  "vector_id": "C31-SSA-003-register-smuggling-value-ref"
+}

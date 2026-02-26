@@ -1,0 +1,7 @@
+{
+  "error_code": "DATA_LEAK_PREVENTION",
+  "response_sha256": "812415482d25bd10410752d74a29be31a8506b93049be4d30335202056ad1af1",
+  "semantic_root": null,
+  "status": "REJECTED",
+  "vector_id": "C31-NARR-002-token-guard-unbound-proper-noun"
+}

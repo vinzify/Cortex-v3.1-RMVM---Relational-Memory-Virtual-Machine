@@ -1,0 +1,7 @@
+{
+  "error_code": "SCHEMA_VIOLATION",
+  "response_sha256": "13dbf6eb25b50cc4619fc2db0dbdfcdfd28f608237a8f235cd0ce4a286d69fa5",
+  "semantic_root": null,
+  "status": "REJECTED",
+  "vector_id": "C31-SSA-002-use-before-define"
+}

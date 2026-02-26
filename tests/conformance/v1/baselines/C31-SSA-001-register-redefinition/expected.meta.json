@@ -1,0 +1,7 @@
+{
+  "error_code": "SCHEMA_VIOLATION",
+  "response_sha256": "7558b507b006f519a9243eab622b6ac4aa53ec07b2f8194781c4c1e6732cdf23",
+  "semantic_root": null,
+  "status": "REJECTED",
+  "vector_id": "C31-SSA-001-register-redefinition"
+}

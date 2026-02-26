@@ -1,0 +1,131 @@
+{
+  "vector_id": "C31-CORE-002-selector-resolve-deterministic",
+  "spec_version": "conformance/v1.0.0",
+  "proto_version": "cortex_rmvm_v3_1",
+  "description": "Selector then resolve deterministic winner.",
+  "manifest": {
+    "request_id": "req-C31-CORE-002-selector-resolve-deterministic",
+    "handles": [
+      {
+        "ref": "H0",
+        "type_id": "normative.preference",
+        "availability": "READY",
+        "subject": "user:vinz",
+        "predicate_label": "prefers_beverage",
+        "trust_tier": "TIER_3_CONFIRMED",
+        "taint": [],
+        "scope": "SCOPE_GLOBAL",
+        "signature_summary": "prefers_beverage for user:vinz",
+        "conflict_group_id": "conflict:prefers_beverage:user:vinz:global",
+        "open_end": true
+      },
+      {
+        "ref": "H1",
+        "type_id": "normative.preference",
+        "availability": "READY",
+        "subject": "user:vinz",
+        "predicate_label": "prefers_beverage",
+        "trust_tier": "TIER_2_VERIFIED",
+        "taint": [],
+        "scope": "SCOPE_GLOBAL",
+        "signature_summary": "prefers_beverage for user:vinz",
+        "conflict_group_id": "conflict:prefers_beverage:user:vinz:global",
+        "open_end": true
+      }
+    ],
+    "selectors": [
+      {
+        "sel": "S0",
+        "description": "Find preferences for subject",
+        "params": [
+          {
+            "name": "subject",
+            "type": "PARAM_STRING",
+            "enum_values": []
+          }
+        ],
+        "cost_weight": 1.25,
+        "return_type": "RETURN_HANDLE_SET"
+      }
+    ],
+    "context": [],
+    "budget": {
+      "max_ops": 128,
+      "max_join_depth": 3,
+      "max_fanout": 64,
+      "max_total_cost": 256.0
+    }
+  },
+  "plan": {
+    "request_id": "req-C31-CORE-002-selector-resolve-deterministic",
+    "steps": [
+      {
+        "out": "r0",
+        "op": {
+          "kind": "apply_selector",
+          "selector_ref": "S0",
+          "params": {
+            "subject": {
+              "kind": "s",
+              "value": "user:vinz"
+            }
+          }
+        }
+      },
+      {
+        "out": "r1",
+        "op": {
+          "kind": "resolve",
+          "in_reg": "r0",
+          "policy_id": "default"
+        }
+      },
+      {
+        "out": "r2",
+        "op": {
+          "kind": "project",
+          "in_reg": "r1",
+          "field_paths": [
+            "ref"
+          ]
+        }
+      },
+      {
+        "out": "r3",
+        "op": {
+          "kind": "assert",
+          "assertion_type": "ASSERT_WORLD_FACT",
+          "bindings": {
+            "winner": {
+              "reg": "r2",
+              "field_path": "ref"
+            }
+          },
+          "citations": []
+        }
+      }
+    ],
+    "outputs": [
+      "r3"
+    ]
+  },
+  "execute_options": {
+    "allow_partial_on_stall": false,
+    "degraded_mode": false,
+    "broken_lineage_handles": [],
+    "narrative_templates": []
+  },
+  "expect": {
+    "status": "OK",
+    "error_code": null,
+    "semantic_root": "a683cfaa0749b5a57aa00b73bbd142a7a780c28e3e6a719ad3c627b827c3a150",
+    "verified_blocks": [
+      "ASSERT_WORLD_FACT: winner=H0"
+    ],
+    "stall": null
+  },
+  "determinism": {
+    "assert_response_cpe_sha256": "f9d78262bd810b017d3647e74f3e3260fdf02e38308bac1637a89a6637c171ca",
+    "assert_semantic_root": true
+  }
+}

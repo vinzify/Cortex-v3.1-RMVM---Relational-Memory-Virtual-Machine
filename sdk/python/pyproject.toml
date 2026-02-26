@@ -1,0 +1,24 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "cortex-rmvm-sdk"
+version = "0.1.0"
+description = "Python SDK for Cortex RMVM gRPC service"
+readme = "README.md"
+license = "MIT"
+requires-python = ">=3.10"
+authors = [{ name = "Vinzify" }]
+urls = { Homepage = "https://github.com/vinzify/Cortex-v3.1-RMVM---Relational-Memory-Virtual-Machine", Repository = "https://github.com/vinzify/Cortex-v3.1-RMVM---Relational-Memory-Virtual-Machine" }
+dependencies = [
+  "grpcio>=1.71.2",
+  "protobuf>=5.27.0"
+]
+
+
+[tool.setuptools]
+packages = ["cortex_rmvm_sdk", "cortex_rmvm_sdk.generated"]
+
+[tool.setuptools.package-data]
+"cortex_rmvm_sdk.generated" = ["*.json", "*.py"]

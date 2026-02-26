@@ -1,0 +1,131 @@
+name: Determinism CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+jobs:
+  conformance:
+    name: Conformance (${{ matrix.os_id }})
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: ubuntu-latest
+            os_id: linux
+          - os: macos-latest
+            os_id: macos
+          - os: windows-latest
+            os_id: windows
+    env:
+      RMVM_RUN_ID: ci-${{ github.run_id }}-${{ github.run_attempt }}
+      RMVM_OS_ID: ${{ matrix.os_id }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Rust Toolchain
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          toolchain: 1.93.1
+          components: rustfmt, clippy
+
+      - name: Check Dependency Manifest Hash
+        shell: pwsh
+        run: ./scripts/check_dependency_manifest_hash.ps1
+
+      - name: Check Proto Checksums
+        shell: pwsh
+        run: ./scripts/check_proto_checksums.ps1
+
+      - name: Build + Test Workspace
+        run: cargo test --workspace --locked
+
+      - name: Conformance Runner
+        run: cargo run --locked -p rmvm-tests --bin conformance_runner -- check
+
+      - name: Export Conformance Summary
+        shell: pwsh
+        run: ./scripts/export_conformance_summary.ps1 -RunId $env:RMVM_RUN_ID -OsId $env:RMVM_OS_ID
+
+      - name: Upload Conformance Reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: conformance-${{ matrix.os_id }}
+          path: tests/conformance/v1/reports/${{ env.RMVM_RUN_ID }}/${{ env.RMVM_OS_ID }}
+          if-no-files-found: error
+
+  compare-determinism:
+    name: Compare Cross-OS Determinism
+    runs-on: ubuntu-latest
+    needs: [conformance]
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Download Linux Artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: conformance-linux
+          path: artifacts/linux
+
+      - name: Download macOS Artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: conformance-macos
+          path: artifacts/macos
+
+      - name: Download Windows Artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: conformance-windows
+          path: artifacts/windows
+
+      - name: Compare Summaries
+        shell: pwsh
+        run: |
+          ./scripts/compare_conformance_summaries.ps1 `
+            -LinuxSummary artifacts/linux/summary.json `
+            -MacSummary artifacts/macos/summary.json `
+            -WindowsSummary artifacts/windows/summary.json
+
+  sdk-wire-compat:
+    name: SDK Wire Compatibility
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Rust Toolchain
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          toolchain: 1.93.1
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24.13.1
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+
+      - name: Check Proto Checksums
+        shell: pwsh
+        run: ./scripts/check_proto_checksums.ps1
+
+      - name: Build Rust Workspace
+        run: cargo build --workspace --locked
+
+      - name: Verify Generated Code Is Stable
+        run: git diff --exit-code
+
+      - name: TypeScript SDK Build
+        working-directory: sdk/typescript
+        run: |
+          npm ci
+          npm run build
+
+      - name: Python SDK Compile
+        run: python -m compileall sdk/python

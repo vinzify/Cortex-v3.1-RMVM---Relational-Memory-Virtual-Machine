@@ -1,0 +1,7 @@
+{
+  "error_code": null,
+  "response_sha256": "44c78b566c6b6e2a33fa59538049206086d6196e15c4c7ea741a1271c29154d1",
+  "semantic_root": "9cc39a883ce74f1561fee73cde74a485f7a8ae00de7d504edd1e50e57a0e152e",
+  "status": "OK",
+  "vector_id": "C31-CORE-004-join-same-entity"
+}

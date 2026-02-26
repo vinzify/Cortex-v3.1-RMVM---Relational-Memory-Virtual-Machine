@@ -1,0 +1,307 @@
+syntax = "proto3";
+
+package cortex.rmvm.v3_1;
+
+import "google/protobuf/timestamp.proto";
+
+option go_package = "cortex/rmvm/v3_1;rmvmv31";
+
+message PublicManifest {
+  string request_id = 1;
+  repeated HandleRef handles = 2;
+  repeated SelectorRef selectors = 3;
+  repeated ContextVar context = 4;
+  PlanBudget budget = 5;
+}
+
+message HandleRef {
+  string ref = 1;
+  string type_id = 2;
+  HandleAvailability availability = 3;
+  HandleMeta meta = 4;
+  string signature_summary = 5;
+  string conflict_group_id = 6;
+}
+
+enum HandleAvailability {
+  HANDLE_AVAILABILITY_UNSPECIFIED = 0;
+  READY = 1;
+  ARCHIVAL_PENDING = 2;
+  OFFLINE = 3;
+}
+
+message HandleMeta {
+  string subject = 1;
+  string predicate_label = 2;
+  TrustTier trust_tier = 3;
+  repeated TaintClass taint = 4;
+  TemporalBound temporal = 5;
+  Scope scope = 6;
+}
+
+message TemporalBound {
+  google.protobuf.Timestamp valid_from = 1;
+  google.protobuf.Timestamp valid_to = 2;
+  bool open_end = 3;
+}
+
+enum TrustTier {
+  TRUST_TIER_UNSPECIFIED = 0;
+  TIER_0_QUARANTINED = 1;
+  TIER_1_ASSERTED = 2;
+  TIER_2_VERIFIED = 3;
+  TIER_3_CONFIRMED = 4;
+  TIER_4_POLICY_SIGNED = 5;
+}
+
+enum TaintClass {
+  TAINT_UNSPECIFIED = 0;
+  TAINT_USER = 1;
+  TAINT_TOOL = 2;
+  TAINT_WEB_UNTRUSTED = 3;
+  TAINT_WEB_TRUSTED = 4;
+  TAINT_MIXED = 5;
+}
+
+enum Scope {
+  SCOPE_UNSPECIFIED = 0;
+  SCOPE_SESSION = 1;
+  SCOPE_PROJECT = 2;
+  SCOPE_PERSON = 3;
+  SCOPE_ORG = 4;
+  SCOPE_GLOBAL = 5;
+}
+
+message SelectorRef {
+  string sel = 1;
+  string description = 2;
+  repeated ParamSpec params = 3;
+  double cost_weight = 4;
+  SelectorReturn return_type = 5;
+}
+
+message ParamSpec {
+  string name = 1;
+  ParamType type = 2;
+  repeated string enum_values = 3;
+}
+
+enum ParamType {
+  PARAM_TYPE_UNSPECIFIED = 0;
+  PARAM_STRING = 1;
+  PARAM_BOOL = 2;
+  PARAM_INT64 = 3;
+  PARAM_FLOAT64 = 4;
+  PARAM_TIMESTAMP = 5;
+  PARAM_ENUM = 6;
+  PARAM_SCOPE = 7;
+}
+
+enum SelectorReturn {
+  SELECTOR_RETURN_UNSPECIFIED = 0;
+  RETURN_HANDLE = 1;
+  RETURN_HANDLE_SET = 2;
+  RETURN_STRUCT = 3;
+}
+
+message ContextVar {
+  string name = 1;
+  Value value = 2;
+}
+
+message PlanBudget {
+  uint32 max_ops = 1;
+  uint32 max_join_depth = 2;
+  uint32 max_fanout = 3;
+  double max_total_cost = 4;
+}
+
+message RMVMPlan {
+  string request_id = 1;
+  repeated Step steps = 2;
+  repeated OutputSpec outputs = 3;
+}
+
+message Step {
+  string out = 1;
+  oneof op {
+    OpFetch fetch = 10;
+    OpApplySelector apply_selector = 11;
+    OpResolve resolve = 12;
+    OpFilter filter = 13;
+    OpJoin join = 14;
+    OpProject project = 15;
+    OpAssert assert_op = 16;
+  }
+}
+
+message OpFetch {
+  string handle_ref = 1;
+}
+
+message OpApplySelector {
+  string selector_ref = 1;
+  map<string, Value> params = 2;
+}
+
+message OpResolve {
+  string in_reg = 1;
+  string policy_id = 2;
+}
+
+message OpFilter {
+  string in_reg = 1;
+  string filter_ref = 2;
+  map<string, Value> params = 3;
+}
+
+message OpJoin {
+  string left_reg = 1;
+  string right_reg = 2;
+  EdgeType edge_type = 3;
+}
+
+enum EdgeType {
+  EDGE_TYPE_UNSPECIFIED = 0;
+  EDGE_CONFLICTS_WITH = 1;
+  EDGE_SUPERSEDES = 2;
+  EDGE_PROVENANCE = 3;
+  EDGE_SAME_ENTITY = 4;
+}
+
+message OpProject {
+  string in_reg = 1;
+  repeated string field_paths = 2;
+}
+
+message OpAssert {
+  AssertionType assertion_type = 1;
+  map<string, ValueRef> bindings = 2;
+  repeated CitationRef citations = 3;
+}
+
+enum AssertionType {
+  ASSERTION_TYPE_UNSPECIFIED = 0;
+  ASSERT_USER_PREFERENCE = 1;
+  ASSERT_WORLD_FACT = 2;
+  ASSERT_DECISION = 3;
+  ASSERT_PROCEDURE = 4;
+  ASSERT_CONFLICT_EXPLANATION = 5;
+}
+
+message ValueRef {
+  string reg = 1;
+  string field_path = 2;
+}
+
+message CitationRef {
+  oneof cite {
+    string handle_ref = 1;
+    string anchor_ref = 2;
+  }
+}
+
+message Value {
+  oneof v {
+    string s = 1;
+    bool b = 2;
+    int64 i64 = 3;
+    double f64 = 4;
+    google.protobuf.Timestamp ts = 5;
+    string e = 6;
+  }
+}
+
+message OutputSpec {
+  string reg = 1;
+}
+
+message ExecuteRequest {
+  PublicManifest manifest = 1;
+  RMVMPlan plan = 2;
+}
+
+message ExecuteResponse {
+  ExecutionStatus status = 1;
+  repeated VerifiedAssertion assertions = 2;
+  AssertionMerkleProof proof = 3;
+  RenderedOutput rendered = 4;
+  StallInfo stall = 5;
+  ExecutionError error = 6;
+}
+
+enum ExecutionStatus {
+  EXECUTION_STATUS_UNSPECIFIED = 0;
+  OK = 1;
+  REJECTED = 2;
+  RANGE_EXCEEDED = 3;
+  AUTH_DENIED = 4;
+  STALL = 5;
+}
+
+message StallInfo {
+  string handle_ref = 1;
+  HandleAvailability availability = 2;
+  google.protobuf.Timestamp estimated_ready_at = 3;
+  string retrieval_ticket = 4;
+}
+
+message VerifiedAssertion {
+  AssertionType assertion_type = 1;
+  map<string, Value> fields = 2;
+  repeated CanonicalCitation citations = 3;
+}
+
+message CanonicalCitation {
+  string anchor_digest = 1;
+}
+
+message AssertionMerkleProof {
+  string semantic_root = 1;
+  string trace_root = 2;
+  repeated InclusionProof inclusion = 3;
+}
+
+message InclusionProof {
+  uint32 assertion_index = 1;
+  repeated string sibling_hashes = 2;
+}
+
+message RenderedOutput {
+  repeated string verified_blocks = 1;
+  repeated string narrative_blocks = 2;
+}
+
+message ExecutionError {
+  ErrorCode code = 1;
+  string message = 2;
+  repeated Hint hints = 3;
+}
+
+enum ErrorCode {
+  ERROR_CODE_UNSPECIFIED = 0;
+
+  SCHEMA_VIOLATION = 1;
+  UNKNOWN_HANDLE_REF = 2;
+  UNKNOWN_SELECTOR_REF = 3;
+  TYPE_MISMATCH = 4;
+
+  POLICY_NOT_FOUND = 10;
+  AMBIGUOUS_CONFLICT = 11;
+
+  FIELD_REDACTED = 20;
+  DATA_LEAK_PREVENTION = 21;
+  UNTRUSTED_PROVENANCE = 22;
+  ERROR_BROKEN_LINEAGE = 23;
+
+  COST_GUARD_REJECTED = 30;
+  GRAPH_TRAVERSAL_LIMIT = 31;
+  EVAL_TIMEOUT = 32;
+
+  HANDLE_NOT_READY = 40;
+}
+
+message Hint {
+  string kind = 1;
+  string detail = 2;
+}

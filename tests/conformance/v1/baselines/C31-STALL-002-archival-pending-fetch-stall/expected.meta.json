@@ -1,0 +1,7 @@
+{
+  "error_code": null,
+  "response_sha256": "f7af81b3497ec4a5ce946ac7ad0443002f2bcbac190be34ce83578b2a262045a",
+  "semantic_root": null,
+  "status": "STALL",
+  "vector_id": "C31-STALL-002-archival-pending-fetch-stall"
+}

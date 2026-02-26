@@ -1,0 +1,38 @@
+[package]
+name = "rmvm-grpc"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+repository.workspace = true
+homepage.workspace = true
+readme = "README.md"
+description = "gRPC transport layer and server binary for Cortex RMVM v3.1."
+keywords = ["grpc", "rmvm", "memory", "cortex"]
+categories = ["network-programming", "api-bindings"]
+include = [
+  "build.rs",
+  "Cargo.toml",
+  "README.md",
+  "src/**",
+  "examples/**",
+  "tests/**"
+]
+
+[[bin]]
+name = "rmvm-grpc-server"
+path = "src/bin/server.rs"
+
+[dependencies]
+prost.workspace = true
+prost-types.workspace = true
+rmvm-kernel = { path = "../rmvm-kernel" }
+rmvm-proto = { path = "../rmvm-proto" }
+tokio = { workspace = true, features = ["macros", "rt-multi-thread", "net"] }
+tokio-stream = { workspace = true, features = ["net"] }
+tonic = { workspace = true, features = ["transport"] }
+tonic-prost.workspace = true
+
+[build-dependencies]
+protoc-bin-vendored.workspace = true
+tonic-build.workspace = true
+tonic-prost-build.workspace = true

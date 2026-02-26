@@ -1,0 +1,32 @@
+[workspace]
+members = [
+  "crates/rmvm-proto",
+  "crates/rmvm-kernel",
+  "crates/rmvm-tests",
+  "crates/rmvm-grpc",
+]
+resolver = "2"
+
+[workspace.package]
+edition = "2024"
+version = "0.1.0"
+license = "MIT"
+repository = "https://github.com/vinzify/Cortex-v3.1-RMVM---Relational-Memory-Virtual-Machine"
+homepage = "https://github.com/vinzify/Cortex-v3.1-RMVM---Relational-Memory-Virtual-Machine"
+readme = "README.md"
+
+[workspace.dependencies]
+hex = "=0.4.3"
+prost = "=0.14.3"
+prost-build = "=0.14.3"
+prost-types = "=0.14.3"
+protoc-bin-vendored = "=3.2.0"
+regex = "=1.12.3"
+sha2 = "=0.10.9"
+tokio = "=1.49.0"
+tokio-stream = "=0.1.18"
+thiserror = "=2.0.18"
+tonic = "=0.14.5"
+tonic-build = "=0.14.5"
+tonic-prost = "=0.14.5"
+tonic-prost-build = "=0.14.5"

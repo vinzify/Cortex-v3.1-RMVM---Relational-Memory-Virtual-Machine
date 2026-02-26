@@ -1,0 +1,41 @@
+{
+  "name": "@cortex/rmvm-sdk",
+  "version": "0.1.0",
+  "description": "TypeScript gRPC SDK for Cortex RMVM v3.1",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/vinzify/Cortex-v3.1-RMVM---Relational-Memory-Virtual-Machine.git"
+  },
+  "type": "module",
+  "main": "dist/src/index.js",
+  "types": "dist/src/index.d.ts",
+  "files": [
+    "dist",
+    "README.md"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/src/index.d.ts",
+      "default": "./dist/src/index.js"
+    }
+  },
+  "scripts": {
+    "build": "npm exec tsc -- -p tsconfig.json && node scripts/copy-proto.mjs",
+    "prepack": "npm run build",
+    "example:e2e": "tsx examples/e2e.ts",
+    "example:stall-retry": "tsx examples/stall_retry.ts"
+  },
+  "dependencies": {
+    "@grpc/grpc-js": "^1.14.0",
+    "@grpc/proto-loader": "^0.8.0"
+  },
+  "devDependencies": {
+    "@types/node": "^24.7.1",
+    "tsx": "^4.20.6",
+    "typescript": "^5.9.3"
+  }
+}

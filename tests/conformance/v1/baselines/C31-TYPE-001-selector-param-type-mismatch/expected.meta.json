@@ -1,0 +1,7 @@
+{
+  "error_code": "TYPE_MISMATCH",
+  "response_sha256": "3473d4dd7715c1927d5720132a30c464dcc6ce8856c0fa90fd3634cd8b393de6",
+  "semantic_root": null,
+  "status": "REJECTED",
+  "vector_id": "C31-TYPE-001-selector-param-type-mismatch"
+}

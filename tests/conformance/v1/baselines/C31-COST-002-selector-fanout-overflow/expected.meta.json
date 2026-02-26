@@ -1,0 +1,7 @@
+{
+  "error_code": "GRAPH_TRAVERSAL_LIMIT",
+  "response_sha256": "f886482ad858053d1cc602e52ee9530ff3d99282ac22ef1965eb44ea5c7b0fbf",
+  "semantic_root": null,
+  "status": "REJECTED",
+  "vector_id": "C31-COST-002-selector-fanout-overflow"
+}

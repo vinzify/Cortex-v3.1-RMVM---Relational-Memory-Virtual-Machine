@@ -1,0 +1,109 @@
+{
+  "vector_id": "C31-DET-002-map-order-permutation-b",
+  "spec_version": "conformance/v1.0.0",
+  "proto_version": "cortex_rmvm_v3_1",
+  "description": "Assertion binding map order B.",
+  "manifest": {
+    "request_id": "req-C31-DET-002-map-order-permutation-b",
+    "handles": [
+      {
+        "ref": "H0",
+        "type_id": "normative.preference",
+        "availability": "READY",
+        "subject": "user:vinz",
+        "predicate_label": "prefers_beverage",
+        "trust_tier": "TIER_3_CONFIRMED",
+        "taint": [],
+        "scope": "SCOPE_GLOBAL",
+        "signature_summary": "prefers_beverage for user:vinz",
+        "conflict_group_id": "conflict:prefers_beverage:user:vinz:global",
+        "open_end": true
+      }
+    ],
+    "selectors": [
+      {
+        "sel": "S0",
+        "description": "Find preferences for subject",
+        "params": [
+          {
+            "name": "subject",
+            "type": "PARAM_STRING",
+            "enum_values": []
+          }
+        ],
+        "cost_weight": 1.25,
+        "return_type": "RETURN_HANDLE_SET"
+      }
+    ],
+    "context": [],
+    "budget": {
+      "max_ops": 128,
+      "max_join_depth": 3,
+      "max_fanout": 64,
+      "max_total_cost": 256.0
+    }
+  },
+  "plan": {
+    "request_id": "req-C31-DET-002-map-order-permutation-b",
+    "steps": [
+      {
+        "out": "r0",
+        "op": {
+          "kind": "fetch",
+          "handle_ref": "H0"
+        }
+      },
+      {
+        "out": "r1",
+        "op": {
+          "kind": "project",
+          "in_reg": "r0",
+          "field_paths": [
+            "meta.subject",
+            "type_id"
+          ]
+        }
+      },
+      {
+        "out": "r2",
+        "op": {
+          "kind": "assert",
+          "assertion_type": "ASSERT_WORLD_FACT",
+          "bindings": {
+            "a": {
+              "reg": "r1",
+              "field_path": "meta.subject"
+            },
+            "b": {
+              "reg": "r1",
+              "field_path": "type_id"
+            }
+          },
+          "citations": []
+        }
+      }
+    ],
+    "outputs": [
+      "r2"
+    ]
+  },
+  "execute_options": {
+    "allow_partial_on_stall": false,
+    "degraded_mode": false,
+    "broken_lineage_handles": [],
+    "narrative_templates": []
+  },
+  "expect": {
+    "status": "OK",
+    "error_code": null,
+    "semantic_root": "8edb0c6e8e8d4351a1b0a63f83180e919bef693d7402189063d336d54e727d31",
+    "verified_blocks": [
+      "ASSERT_WORLD_FACT: a=user:vinz, b=normative.preference"
+    ],
+    "stall": null
+  },
+  "determinism": {
+    "assert_response_cpe_sha256": "b7295bb7af699730cbaf9bb9ae8ea904d5da97c56e790d2a36dcbf5aaa991fea",
+    "assert_semantic_root": true
+  }
+}

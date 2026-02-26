@@ -1,0 +1,146 @@
+{
+  "vector_id": "C31-CORE-004-join-same-entity",
+  "spec_version": "conformance/v1.0.0",
+  "proto_version": "cortex_rmvm_v3_1",
+  "description": "Join handles on same entity edge.",
+  "manifest": {
+    "request_id": "req-C31-CORE-004-join-same-entity",
+    "handles": [
+      {
+        "ref": "H0",
+        "type_id": "normative.preference",
+        "availability": "READY",
+        "subject": "user:vinz",
+        "predicate_label": "prefers_beverage",
+        "trust_tier": "TIER_3_CONFIRMED",
+        "taint": [],
+        "scope": "SCOPE_GLOBAL",
+        "signature_summary": "prefers_beverage for user:vinz",
+        "conflict_group_id": "conflict:prefers_beverage:user:vinz:global",
+        "open_end": true
+      },
+      {
+        "ref": "H1",
+        "type_id": "normative.preference",
+        "availability": "READY",
+        "subject": "user:vinz",
+        "predicate_label": "prefers_beverage",
+        "trust_tier": "TIER_3_CONFIRMED",
+        "taint": [],
+        "scope": "SCOPE_GLOBAL",
+        "signature_summary": "prefers_beverage for user:vinz",
+        "conflict_group_id": "conflict:prefers_beverage:user:vinz:global",
+        "open_end": true
+      },
+      {
+        "ref": "H2",
+        "type_id": "normative.preference",
+        "availability": "READY",
+        "subject": "user:other",
+        "predicate_label": "prefers_beverage",
+        "trust_tier": "TIER_3_CONFIRMED",
+        "taint": [],
+        "scope": "SCOPE_GLOBAL",
+        "signature_summary": "prefers_beverage for user:other",
+        "conflict_group_id": "conflict:prefers_beverage:user:other:global",
+        "open_end": true
+      }
+    ],
+    "selectors": [
+      {
+        "sel": "S0",
+        "description": "Find preferences for subject",
+        "params": [
+          {
+            "name": "subject",
+            "type": "PARAM_STRING",
+            "enum_values": []
+          }
+        ],
+        "cost_weight": 1.25,
+        "return_type": "RETURN_HANDLE_SET"
+      }
+    ],
+    "context": [],
+    "budget": {
+      "max_ops": 128,
+      "max_join_depth": 3,
+      "max_fanout": 64,
+      "max_total_cost": 256.0
+    }
+  },
+  "plan": {
+    "request_id": "req-C31-CORE-004-join-same-entity",
+    "steps": [
+      {
+        "out": "r0",
+        "op": {
+          "kind": "fetch",
+          "handle_ref": "H0"
+        }
+      },
+      {
+        "out": "r1",
+        "op": {
+          "kind": "fetch",
+          "handle_ref": "H1"
+        }
+      },
+      {
+        "out": "r2",
+        "op": {
+          "kind": "join",
+          "left_reg": "r0",
+          "right_reg": "r1",
+          "edge_type": "EDGE_SAME_ENTITY"
+        }
+      },
+      {
+        "out": "r3",
+        "op": {
+          "kind": "project",
+          "in_reg": "r2",
+          "field_paths": [
+            "set_count"
+          ]
+        }
+      },
+      {
+        "out": "r4",
+        "op": {
+          "kind": "assert",
+          "assertion_type": "ASSERT_WORLD_FACT",
+          "bindings": {
+            "c": {
+              "reg": "r3",
+              "field_path": "set_count"
+            }
+          },
+          "citations": []
+        }
+      }
+    ],
+    "outputs": [
+      "r4"
+    ]
+  },
+  "execute_options": {
+    "allow_partial_on_stall": false,
+    "degraded_mode": false,
+    "broken_lineage_handles": [],
+    "narrative_templates": []
+  },
+  "expect": {
+    "status": "OK",
+    "error_code": null,
+    "semantic_root": "9cc39a883ce74f1561fee73cde74a485f7a8ae00de7d504edd1e50e57a0e152e",
+    "verified_blocks": [
+      "ASSERT_WORLD_FACT: c=2"
+    ],
+    "stall": null
+  },
+  "determinism": {
+    "assert_response_cpe_sha256": "44c78b566c6b6e2a33fa59538049206086d6196e15c4c7ea741a1271c29154d1",
+    "assert_semantic_root": true
+  }
+}

@@ -1,0 +1,7 @@
+{
+  "error_code": null,
+  "response_sha256": "3843940d84cb9782f4e47d452055ecb6f6f0cfbd71d405b4e96cde4acef07f28",
+  "semantic_root": "1e97d407ff5521294dc37df6ec1b8dfdf96879a37029bdf2298f011cdabe5229",
+  "status": "OK",
+  "vector_id": "C31-CORE-003-filter-by-subject"
+}

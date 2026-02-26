@@ -1,0 +1,7 @@
+{
+  "error_code": "UNKNOWN_SELECTOR_REF",
+  "response_sha256": "6c252c9d56eb727aa00e0f8f43fc11a2790c647254f0d8933adba70022a8dd57",
+  "semantic_root": null,
+  "status": "REJECTED",
+  "vector_id": "C31-SEC-001-selector-spoofing"
+}

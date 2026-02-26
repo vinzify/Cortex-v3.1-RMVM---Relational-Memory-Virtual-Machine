@@ -1,0 +1,7 @@
+{
+  "error_code": null,
+  "response_sha256": "b7295bb7af699730cbaf9bb9ae8ea904d5da97c56e790d2a36dcbf5aaa991fea",
+  "semantic_root": "8edb0c6e8e8d4351a1b0a63f83180e919bef693d7402189063d336d54e727d31",
+  "status": "OK",
+  "vector_id": "C31-DET-001-map-order-permutation-a"
+}

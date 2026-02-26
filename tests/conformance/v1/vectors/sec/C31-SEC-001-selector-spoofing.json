@@ -1,0 +1,77 @@
+{
+  "vector_id": "C31-SEC-001-selector-spoofing",
+  "spec_version": "conformance/v1.0.0",
+  "proto_version": "cortex_rmvm_v3_1",
+  "description": "Selector spoofing should reject.",
+  "manifest": {
+    "request_id": "req-C31-SEC-001-selector-spoofing",
+    "handles": [
+      {
+        "ref": "H0",
+        "type_id": "normative.preference",
+        "availability": "READY",
+        "subject": "user:vinz",
+        "predicate_label": "prefers_beverage",
+        "trust_tier": "TIER_3_CONFIRMED",
+        "taint": [],
+        "scope": "SCOPE_GLOBAL",
+        "signature_summary": "prefers_beverage for user:vinz",
+        "conflict_group_id": "conflict:prefers_beverage:user:vinz:global",
+        "open_end": true
+      }
+    ],
+    "selectors": [
+      {
+        "sel": "S0",
+        "description": "Find preferences for subject",
+        "params": [
+          {
+            "name": "subject",
+            "type": "PARAM_STRING",
+            "enum_values": []
+          }
+        ],
+        "cost_weight": 1.25,
+        "return_type": "RETURN_HANDLE_SET"
+      }
+    ],
+    "context": [],
+    "budget": {
+      "max_ops": 128,
+      "max_join_depth": 3,
+      "max_fanout": 64,
+      "max_total_cost": 256.0
+    }
+  },
+  "plan": {
+    "request_id": "req-C31-SEC-001-selector-spoofing",
+    "steps": [
+      {
+        "out": "r0",
+        "op": {
+          "kind": "apply_selector",
+          "selector_ref": "S_spoof",
+          "params": {}
+        }
+      }
+    ],
+    "outputs": []
+  },
+  "execute_options": {
+    "allow_partial_on_stall": false,
+    "degraded_mode": false,
+    "broken_lineage_handles": [],
+    "narrative_templates": []
+  },
+  "expect": {
+    "status": "REJECTED",
+    "error_code": "UNKNOWN_SELECTOR_REF",
+    "semantic_root": null,
+    "verified_blocks": null,
+    "stall": null
+  },
+  "determinism": {
+    "assert_response_cpe_sha256": "6c252c9d56eb727aa00e0f8f43fc11a2790c647254f0d8933adba70022a8dd57",
+    "assert_semantic_root": true
+  }
+}

@@ -1,0 +1,92 @@
+{
+  "vector_id": "C31-SEC-006-taint-gate-web-untrusted-policy-sink",
+  "spec_version": "conformance/v1.0.0",
+  "proto_version": "cortex_rmvm_v3_1",
+  "description": "Web untrusted taint into policy sink should reject.",
+  "manifest": {
+    "request_id": "req-C31-SEC-006-taint-gate-web-untrusted-policy-sink",
+    "handles": [
+      {
+        "ref": "H0",
+        "type_id": "normative.preference",
+        "availability": "READY",
+        "subject": "user:vinz",
+        "predicate_label": "prefers_beverage",
+        "trust_tier": "TIER_3_CONFIRMED",
+        "taint": [
+          "TAINT_WEB_UNTRUSTED"
+        ],
+        "scope": "SCOPE_GLOBAL",
+        "signature_summary": "prefers_beverage for user:vinz",
+        "conflict_group_id": "conflict:prefers_beverage:user:vinz:global",
+        "open_end": true
+      }
+    ],
+    "selectors": [
+      {
+        "sel": "S0",
+        "description": "Find preferences for subject",
+        "params": [
+          {
+            "name": "subject",
+            "type": "PARAM_STRING",
+            "enum_values": []
+          }
+        ],
+        "cost_weight": 1.25,
+        "return_type": "RETURN_HANDLE_SET"
+      }
+    ],
+    "context": [],
+    "budget": {
+      "max_ops": 128,
+      "max_join_depth": 3,
+      "max_fanout": 64,
+      "max_total_cost": 256.0
+    }
+  },
+  "plan": {
+    "request_id": "req-C31-SEC-006-taint-gate-web-untrusted-policy-sink",
+    "steps": [
+      {
+        "out": "r0",
+        "op": {
+          "kind": "fetch",
+          "handle_ref": "H0"
+        }
+      },
+      {
+        "out": "r1",
+        "op": {
+          "kind": "assert",
+          "assertion_type": "ASSERT_DECISION",
+          "bindings": {
+            "who": {
+              "reg": "r0",
+              "field_path": "meta.subject"
+            }
+          },
+          "citations": []
+        }
+      }
+    ],
+    "outputs": []
+  },
+  "execute_options": {
+    "allow_partial_on_stall": false,
+    "degraded_mode": false,
+    "broken_lineage_handles": [],
+    "narrative_templates": []
+  },
+  "expect": {
+    "status": "REJECTED",
+    "error_code": "DATA_LEAK_PREVENTION",
+    "semantic_root": null,
+    "verified_blocks": null,
+    "stall": null
+  },
+  "determinism": {
+    "assert_response_cpe_sha256": "2b6b20ede3a9e8b91c89b697aec18e1620136d74ae1de9ee5a6f4beda418e47a",
+    "assert_semantic_root": true
+  }
+}

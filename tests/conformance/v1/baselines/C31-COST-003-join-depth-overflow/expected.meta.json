@@ -1,0 +1,7 @@
+{
+  "error_code": "GRAPH_TRAVERSAL_LIMIT",
+  "response_sha256": "7218533c504dbae0357e73f973e8a9a23a60ff05d58eb03519a9738b15d57587",
+  "semantic_root": null,
+  "status": "REJECTED",
+  "vector_id": "C31-COST-003-join-depth-overflow"
+}

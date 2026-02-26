@@ -1,0 +1,7 @@
+{
+  "error_code": "UNTRUSTED_PROVENANCE",
+  "response_sha256": "295455c175a2eb0490a983af03a5b5732deab9bfc167eacdf147ee3dd5aad648",
+  "semantic_root": null,
+  "status": "REJECTED",
+  "vector_id": "C31-CORE-005-empty-assert-bindings-reject"
+}

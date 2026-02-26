@@ -1,0 +1,7 @@
+{
+  "error_code": "GRAPH_TRAVERSAL_LIMIT",
+  "response_sha256": "c6dd6bcc6dceb0197c643b8346fe959d2de6e65be806167e4a79f4c1cd2b3f00",
+  "semantic_root": null,
+  "status": "REJECTED",
+  "vector_id": "C31-COST-004-max-ops-overflow"
+}

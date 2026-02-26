@@ -1,0 +1,7 @@
+{
+  "error_code": "UNKNOWN_HANDLE_REF",
+  "response_sha256": "d74306a9a9a3070b7e6d0ca1f02402073bab2046c4edbd9473a3fb2d07add808",
+  "semantic_root": null,
+  "status": "REJECTED",
+  "vector_id": "C31-REF-001-unknown-handle-ref"
+}

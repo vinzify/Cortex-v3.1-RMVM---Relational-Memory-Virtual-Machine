@@ -1,0 +1,7 @@
+{
+  "error_code": "ERROR_BROKEN_LINEAGE",
+  "response_sha256": "8decf09156aa6dd64113e2cbb932369f2833e7fd1b6c98c5eae5e60bff6d2270",
+  "semantic_root": null,
+  "status": "REJECTED",
+  "vector_id": "C31-SEC-004-broken-lineage-transitive"
+}

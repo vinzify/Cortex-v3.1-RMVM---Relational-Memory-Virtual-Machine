@@ -1,0 +1,7 @@
+{
+  "error_code": "COST_GUARD_REJECTED",
+  "response_sha256": "53dc9820c7766fd268a8b7c5b68d554bd029b04dfe96478cffdfb63ff9f7674f",
+  "semantic_root": null,
+  "status": "REJECTED",
+  "vector_id": "C31-COST-001-wide-select-cost-bypass"
+}
