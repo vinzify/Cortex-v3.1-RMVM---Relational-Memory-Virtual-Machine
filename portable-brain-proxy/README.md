@@ -83,7 +83,7 @@ The `cortex` CLI is the Swiss Army knife for your portable memory. 🔨🔧
 ---
 💖 **Support the Project**
 
-If GitPop saves you time and you want to support its continued development, consider sending an ETH donation: 
+If you want to support its continued development, consider sending an ETH donation: 
 `0xe7043f731a2f36679a676938e021c6B67F80b9A1`
 
 ---
