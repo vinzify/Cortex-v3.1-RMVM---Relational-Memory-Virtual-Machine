@@ -11,4 +11,14 @@ sdk/python/**/*.pyc
 
 tests/conformance/v1/reports/local/
 
+# Private Keys & Secrets
+.deploy_keys/
+*.key
+*.pem
+*.pub
+.env*
+CORTEX_BRAIN_SECRET
+
+# OS files
 .DS_Store
+Thumbs.db
